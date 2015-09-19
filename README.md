@@ -38,15 +38,15 @@ Here's a walkthrough of implemented user stories:
 
 1. User can scroll through current popular photos from Instagram. Each Instagram photo post starts with user avatar, useranme, elapsed time since posted, the posted photo, number of likes and photo caption. 
 
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='resources/raw/superPics_userStory1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 2. Under the photo caption you can see the last two (if exists) comments made on the post. 
 
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='resources/raw/superPics_userStory2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 3. You can refresh the photo stream by going to the top of the page, scroll up and release. 
 
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='resources/raw/superPics_userStory3.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
