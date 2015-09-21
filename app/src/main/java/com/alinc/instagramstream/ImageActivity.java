@@ -21,12 +21,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity  {
 
     public static final String CLIENT_ID = "fe24800ca87b4a41907aad9167f4dd65";
     private ArrayList<InstagramPhoto> instagramPhotos;
     private InstagramPhotosAdapter aPhotos;
     private SwipeRefreshLayout swipeContainer;
+    private ListView lvPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +51,8 @@ public class ImageActivity extends AppCompatActivity {
 
         instagramPhotos = new ArrayList<>();
 
-
         aPhotos = new InstagramPhotosAdapter(this, instagramPhotos);
-        ListView lvPhotos = (ListView) findViewById(R.id.lv_images);
+        lvPhotos = (ListView) findViewById(R.id.lv_images);
         lvPhotos.setAdapter(aPhotos);
 
         fetchPopularPhotos();
@@ -76,10 +76,11 @@ public class ImageActivity extends AppCompatActivity {
                         photo.userImageURL = photoJSON.getJSONObject("user").getString("profile_picture");
                         photo.username = photoJSON.getJSONObject("user").getString("username");
                         //photo.timeStamp = shortLapseTime(String.valueOf(DateUtils.getRelativeTimeSpanString((photoJSON.getLong("created_time")) * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS)));
-                        photo.timeStamp = shortLapseTime(timeAgoFromDate(photoJSON.getLong("created_time"), TimeZone.getTimeZone("GMT")));
+                        photo.timeStamp = shortLapseTime(timeAgoFromDate(photoJSON.getLong("created_time")));
                         photo.caption = (photoJSON.optJSONObject("caption") != null) ? photoJSON.getJSONObject("caption").getString("text") : "no caption";
                         photo.imageURL = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
-                        //photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
+                        photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
+                        photo.imageWidth = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("width");
                         photo.likesCount = (photoJSON.optJSONObject("likes") != null) ? photoJSON.getJSONObject("likes").getInt("count") : 0;
                         photo.commentsCount = photoJSON.getJSONObject("comments").getInt("count");
                         if (photo.commentsCount > 0) {
@@ -87,7 +88,7 @@ public class ImageActivity extends AppCompatActivity {
                             JSONArray commentsData = photoJSON.getJSONObject("comments").getJSONArray("data");
                             for (int j = 1; j < 3; j++) {
                                 JSONObject commentsObject = commentsData.getJSONObject(commentsData.length() - j);
-                                photo.allComments.add(commentsObject.getJSONObject("from").getString("username") + ": " + commentsObject.getString("text"));
+                                photo.allComments.add("<b>" + commentsObject.getJSONObject("from").getString("username") + "</b>: " + commentsObject.getString("text"));
                             }
                         }
                         instagramPhotos.add(photo);
@@ -131,7 +132,7 @@ public class ImageActivity extends AppCompatActivity {
 
     public String shortLapseTime(String lapseTime) {
         String shortTime = lapseTime.replaceAll("ago", "");
-        shortTime = shortTime.replaceAll("in", "");
+        //shortTime = shortTime.replaceAll("in", "");
         shortTime = shortTime.replaceAll("years", "y");
         shortTime = shortTime.replaceAll("days", "d");
         shortTime = shortTime.replaceAll("hour", "h");
@@ -142,12 +143,8 @@ public class ImageActivity extends AppCompatActivity {
         return shortTime.replaceAll("\\s", "");
     }
 
-    public static String timeAgoFromDate(Long dateStamp, TimeZone timeZone) {
-
-        TimeZone defaultTimeZone = TimeZone.getDefault();
-        TimeZone.setDefault(timeZone);
-        String relativeTimeSpan = DateUtils.getRelativeTimeSpanString(dateStamp * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        TimeZone.setDefault(defaultTimeZone);
+    public static String timeAgoFromDate(Long dateStamp) {
+        String relativeTimeSpan = DateUtils.getRelativeTimeSpanString(dateStamp * 1000 + TimeZone.getDefault().getRawOffset(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
         return relativeTimeSpan;
     }
 }
