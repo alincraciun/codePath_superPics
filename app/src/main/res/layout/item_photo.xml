@@ -19,7 +19,8 @@
         app:riv_oval="true"
         android:paddingTop="2dp"
         android:paddingLeft="3dp"
-        android:paddingRight="3dp"/>
+        android:paddingRight="3dp"
+        android:paddingBottom="5dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +48,7 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:paddingLeft="3dp"
-        android:paddingRight="3dp"/>
+        android:paddingRight="5dp"/>
 
     <ImageView
         android:layout_width="fill_parent"
@@ -71,7 +72,8 @@
         android:layout_alignParentLeft="true"
         android:paddingTop="10dp"
         android:paddingLeft="3dp"
-        android:paddingRight="3dp"/>
+        android:paddingRight="3dp"
+        android:textColor="@color/blue"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,7 +112,8 @@
         android:paddingTop="1dp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
-        android:paddingStart="3dp">
+        android:paddingStart="3dp"
+        android:paddingBottom="5dp">
     </LinearLayout>
 
 </RelativeLayout>
