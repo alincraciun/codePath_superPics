@@ -1,6 +1,5 @@
 package com.alinc.instagramstream;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -95,11 +93,5 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
         }
 
         return convertView;
-    }
-
-    private void showPhotoCommentsDialog() {
-        //fm = ((Activity) getContext()).getFragmentManager();
-        //InstagramPhotoComments editNameDialog = InstagramPhotoComments.newInstance("Some Title");
-        //editNameDialog.show(fm, "er");
     }
 }

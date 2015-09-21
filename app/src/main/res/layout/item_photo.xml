@@ -96,7 +96,7 @@
         android:id="@+id/tvCommentCount"
         android:layout_below="@+id/tvCaption"
         android:layout_alignParentLeft="true"
-        android:paddingBottom="3dp"
+        android:paddingBottom="2dp"
         android:paddingLeft="3dp"
         android:textStyle="italic"
         android:textSize="12dp"/>
@@ -107,7 +107,7 @@
         android:id="@+id/llComments"
         android:layout_below="@+id/tvCommentCount"
         android:layout_alignParentLeft="true"
-        android:paddingTop="3dp"
+        android:paddingTop="1dp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:paddingStart="3dp">

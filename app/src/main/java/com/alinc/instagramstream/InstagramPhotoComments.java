@@ -5,13 +5,12 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 /**
  * Created by alinc on 9/19/15.
  */
-public class InstagramPhotoComments extends DialogFragment implements AdapterView.OnItemClickListener {
+public class InstagramPhotoComments extends DialogFragment {
 
     public InstagramPhotoComments() {
     }
@@ -32,11 +31,4 @@ public class InstagramPhotoComments extends DialogFragment implements AdapterVie
         ((TextView)tvComment).setText("This is an instance of MyDialogFragment");
         return view;
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        dismiss();
-    }
-
-
 }

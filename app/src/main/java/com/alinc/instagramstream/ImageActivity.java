@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -57,12 +56,11 @@ public class ImageActivity extends AppCompatActivity  {
         });
 
         instagramPhotos = new ArrayList<>();
-
         aPhotos = new InstagramPhotosAdapter(this, instagramPhotos);
         lvPhotos = (ListView) findViewById(R.id.lv_images);
         lvPhotos.setAdapter(aPhotos);
-        fetchPopularPhotos();
         showAllComments();
+        fetchPopularPhotos();
     }
 
     public void fetchPopularPhotos() {
@@ -156,16 +154,12 @@ public class ImageActivity extends AppCompatActivity  {
     }
 
     public void showAllComments() {
-        Log.i("DEBUG: ", "SHOW!");
-        //tvAllComments = (TextView) findViewById(R.id.tvCommentCount);
         lvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("DEBUG: ", "2");
                 FragmentManager fm = getSupportFragmentManager();
                 InstagramPhotoComments showComments = InstagramPhotoComments.newInstance("TitLe");
                 showComments.show(fm, "comments_fragment");
-                Log.i("DEBUG: ", "3");
             }
         });
     }
