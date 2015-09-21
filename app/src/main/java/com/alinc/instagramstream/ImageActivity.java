@@ -1,5 +1,7 @@
 package com.alinc.instagramstream;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +10,11 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -28,6 +34,7 @@ public class ImageActivity extends AppCompatActivity  {
     private InstagramPhotosAdapter aPhotos;
     private SwipeRefreshLayout swipeContainer;
     private ListView lvPhotos;
+    private TextView tvAllComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +61,8 @@ public class ImageActivity extends AppCompatActivity  {
         aPhotos = new InstagramPhotosAdapter(this, instagramPhotos);
         lvPhotos = (ListView) findViewById(R.id.lv_images);
         lvPhotos.setAdapter(aPhotos);
-
         fetchPopularPhotos();
+        showAllComments();
     }
 
     public void fetchPopularPhotos() {
@@ -146,5 +153,20 @@ public class ImageActivity extends AppCompatActivity  {
     public static String timeAgoFromDate(Long dateStamp) {
         String relativeTimeSpan = DateUtils.getRelativeTimeSpanString(dateStamp * 1000 + TimeZone.getDefault().getRawOffset(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
         return relativeTimeSpan;
+    }
+
+    public void showAllComments() {
+        Log.i("DEBUG: ", "SHOW!");
+        //tvAllComments = (TextView) findViewById(R.id.tvCommentCount);
+        lvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("DEBUG: ", "2");
+                FragmentManager fm = getSupportFragmentManager();
+                InstagramPhotoComments showComments = InstagramPhotoComments.newInstance("TitLe");
+                showComments.show(fm, "comments_fragment");
+                Log.i("DEBUG: ", "3");
+            }
+        });
     }
 }

@@ -90,28 +90,27 @@
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:textColor="@color/blue"/>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/llComments"
-        android:layout_below="@+id/tvCaption"
-        android:layout_alignParentLeft="true"
-        android:paddingTop="3dp"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:paddingStart="3dp">
-
-    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvCommentCount"
-        android:layout_below="@+id/llComments"
+        android:layout_below="@+id/tvCaption"
         android:layout_alignParentLeft="true"
         android:paddingBottom="3dp"
         android:paddingLeft="3dp"
         android:textStyle="italic"
         android:textSize="12dp"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llComments"
+        android:layout_below="@+id/tvCommentCount"
+        android:layout_alignParentLeft="true"
+        android:paddingTop="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:paddingStart="3dp">
+    </LinearLayout>
+
 </RelativeLayout>
