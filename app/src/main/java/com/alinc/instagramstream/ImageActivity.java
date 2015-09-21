@@ -93,7 +93,7 @@ public class ImageActivity extends AppCompatActivity  {
                             JSONArray commentsData = photoJSON.getJSONObject("comments").getJSONArray("data");
                             for (int j = 1; j < 3; j++) {
                                 JSONObject commentsObject = commentsData.getJSONObject(commentsData.length() - j);
-                                photo.allComments.add("<b>" + commentsObject.getJSONObject("from").getString("username") + "</b>: " + commentsObject.getString("text"));
+                                photo.allComments.add("<font color=\"#125688\"><b>" + commentsObject.getJSONObject("from").getString("username") + "</b></font>: " + commentsObject.getString("text"));
                             }
                         }
                         instagramPhotos.add(photo);
