@@ -43,7 +43,7 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 
         float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int screenWidth, imageHeight;
+        int screenWidth, screenHeight;
 
 
         if(convertView == null) {
@@ -72,11 +72,14 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
         viewHolder.ivPhoto.setImageResource(0);
 
         screenWidth = (int)dpWidth - (viewHolder.ivPhoto.getPaddingLeft() + viewHolder.ivPhoto.getPaddingRight());
+        screenHeight = (int)dpHeight - (viewHolder.ivPhoto.getPaddingTop() + viewHolder.ivPhoto.getPaddingBottom());
         viewHolder.ivPhoto.setMaxWidth(screenWidth);
-        if(photo.imageWidth > 0)
+        if(photo.imageWidth > 0 && photo.imageHeight > 0)
             viewHolder.ivPhoto.setMaxHeight(photo.imageHeight / (photo.imageWidth / screenWidth));
-        else
+        else if (photo.imageHeight > 0)
             viewHolder.ivPhoto.setMaxHeight(photo.imageHeight / screenWidth);
+        else
+            viewHolder.ivPhoto.setMaxHeight(screenWidth);
         Picasso.with(getContext()).load(photo.imageURL).centerCrop().placeholder(R.drawable.xvga_35mm).fit().into(viewHolder.ivPhoto);
 
         if(photo.allComments.size() > 0) {

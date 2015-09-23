@@ -171,7 +171,7 @@ public class ImageActivity extends AppCompatActivity  {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                CommentsDialog commentsDialog = CommentsDialog.newInstance(photo.id, photo.allComments);
+                CommentsDialog commentsDialog = CommentsDialog.newInstance(instagramPhotos.get(position).id, instagramPhotos.get(position).allComments);
                 commentsDialog.show(fm, "comments_fragment");
             }
         });
