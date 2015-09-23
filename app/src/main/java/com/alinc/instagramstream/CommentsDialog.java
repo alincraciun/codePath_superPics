@@ -22,7 +22,6 @@ public class CommentsDialog extends DialogFragment {
         CommentsDialog frag = new CommentsDialog();
         Bundle args = new Bundle();
         args.putStringArrayList("allComments", allComments);
-        args.put
         frag.setArguments(args);
         return frag;
 
