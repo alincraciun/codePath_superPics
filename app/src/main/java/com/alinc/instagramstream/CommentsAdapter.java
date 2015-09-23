@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ import java.util.List;
  * Created by alinc on 9/22/15.
  */
 public class CommentsAdapter extends ArrayAdapter<String> {
-    public CommentsAdapter(Context context, ArrayList<String> objects) {
+    public CommentsAdapter(Context context, String id, ArrayList<String> objects) {
         super(context, 0, objects);
     }
 

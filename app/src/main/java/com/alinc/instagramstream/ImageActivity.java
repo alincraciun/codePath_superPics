@@ -1,6 +1,5 @@
 package com.alinc.instagramstream;
 
-import android.media.Image;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -62,6 +60,8 @@ public class ImageActivity extends AppCompatActivity  {
 
         lvPhotos.setAdapter(aPhotos);
         fetchPopularPhotos();
+        showCommentsDialog();
+
     }
 
     public void fetchPopularPhotos() {
@@ -79,6 +79,7 @@ public class ImageActivity extends AppCompatActivity  {
                     for (int i = 0; i < photosJSON.length(); i++) {
                         JSONObject photoJSON = photosJSON.getJSONObject(i);
                         photo = new InstagramPhoto();
+                        photo.id = photoJSON.getString("id");
                         photo.userImageURL = photoJSON.getJSONObject("user").getString("profile_picture");
                         photo.username = photoJSON.getJSONObject("user").getString("username");
                         photo.timeStamp = shortLapseTime(timeAgoFromDate(photoJSON.getLong("created_time")));
@@ -97,7 +98,6 @@ public class ImageActivity extends AppCompatActivity  {
                             }
                         }
                         instagramPhotos.add(photo);
-                        showCommentsDialog();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -171,7 +171,7 @@ public class ImageActivity extends AppCompatActivity  {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                CommentsDialog commentsDialog = CommentsDialog.newInstance(photo.allComments);
+                CommentsDialog commentsDialog = CommentsDialog.newInstance(photo.id, photo.allComments);
                 commentsDialog.show(fm, "comments_fragment");
             }
         });

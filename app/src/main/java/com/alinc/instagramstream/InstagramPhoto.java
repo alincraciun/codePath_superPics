@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by alinc on 9/17/15.
  */
 public class InstagramPhoto {
+    public String id;
     public String username;
     public String caption;
     public String imageURL;

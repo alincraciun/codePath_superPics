@@ -18,9 +18,10 @@ public class CommentsDialog extends DialogFragment {
 
     }
 
-    public static CommentsDialog newInstance (ArrayList<String> allComments) {
+    public static CommentsDialog newInstance (String id, ArrayList<String> allComments) {
         CommentsDialog frag = new CommentsDialog();
         Bundle args = new Bundle();
+        args.putString("id", id);
         args.putStringArrayList("allComments", allComments);
         frag.setArguments(args);
         return frag;
@@ -31,7 +32,7 @@ public class CommentsDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.comments_fragment, container);
         ListView lv = (ListView) view.findViewById(R.id.lv_comments);
-        CommentsAdapter adapter = new CommentsAdapter(getActivity().getApplicationContext(), getArguments().getStringArrayList("allComments"));
+        CommentsAdapter adapter = new CommentsAdapter(getActivity().getApplicationContext(), getArguments().getString("id"), getArguments().getStringArrayList("allComments"));
         lv.setAdapter(adapter);
         getDialog().setTitle("COMMENTS");
 
