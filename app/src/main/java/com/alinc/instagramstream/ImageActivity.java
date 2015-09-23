@@ -1,6 +1,6 @@
 package com.alinc.instagramstream;
 
-import android.app.Activity;
+import android.media.Image;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,7 +33,7 @@ public class ImageActivity extends AppCompatActivity  {
     private InstagramPhotosAdapter aPhotos;
     private SwipeRefreshLayout swipeContainer;
     private ListView lvPhotos;
-    private TextView tvAllComments;
+    InstagramPhoto photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class ImageActivity extends AppCompatActivity  {
             getSupportActionBar().setDisplayUseLogoEnabled(true);
         }
 
+        lvPhotos = (ListView) findViewById(R.id.lv_images);
+
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -57,15 +59,14 @@ public class ImageActivity extends AppCompatActivity  {
 
         instagramPhotos = new ArrayList<>();
         aPhotos = new InstagramPhotosAdapter(this, instagramPhotos);
-        lvPhotos = (ListView) findViewById(R.id.lv_images);
+
         lvPhotos.setAdapter(aPhotos);
-        showAllComments();
         fetchPopularPhotos();
     }
 
     public void fetchPopularPhotos() {
-        String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
         AsyncHttpClient httpClient = new AsyncHttpClient();
+        String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
         httpClient.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -77,10 +78,9 @@ public class ImageActivity extends AppCompatActivity  {
                     Log.i("DEBUG", String.valueOf(photosJSON.length()));
                     for (int i = 0; i < photosJSON.length(); i++) {
                         JSONObject photoJSON = photosJSON.getJSONObject(i);
-                        InstagramPhoto photo = new InstagramPhoto();
+                        photo = new InstagramPhoto();
                         photo.userImageURL = photoJSON.getJSONObject("user").getString("profile_picture");
                         photo.username = photoJSON.getJSONObject("user").getString("username");
-                        //photo.timeStamp = shortLapseTime(String.valueOf(DateUtils.getRelativeTimeSpanString((photoJSON.getLong("created_time")) * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS)));
                         photo.timeStamp = shortLapseTime(timeAgoFromDate(photoJSON.getLong("created_time")));
                         photo.caption = (photoJSON.optJSONObject("caption") != null) ? photoJSON.getJSONObject("caption").getString("text") : "no caption";
                         photo.imageURL = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
@@ -91,12 +91,13 @@ public class ImageActivity extends AppCompatActivity  {
                         if (photo.commentsCount > 0) {
                             photo.allComments = new ArrayList<>();
                             JSONArray commentsData = photoJSON.getJSONObject("comments").getJSONArray("data");
-                            for (int j = 1; j < 3; j++) {
-                                JSONObject commentsObject = commentsData.getJSONObject(commentsData.length() - j);
+                            for (int j = 0; j < commentsData.length(); j++) {
+                                JSONObject commentsObject = commentsData.getJSONObject(j);
                                 photo.allComments.add("<font color=\"#125688\"><b>" + commentsObject.getJSONObject("from").getString("username") + "</b></font>: " + commentsObject.getString("text"));
                             }
                         }
                         instagramPhotos.add(photo);
+                        showCommentsDialog();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -106,8 +107,13 @@ public class ImageActivity extends AppCompatActivity  {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                //super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject jsonObject) {
+                super.onFailure(statusCode, headers, throwable, jsonObject);
+                if (throwable.getMessage().contains("UnknownHostException")) {
+                    showErrorDialog("Network Exception", "Unable to contact server host. Server may be rained out or your network connection is faulty!");
+                }
+
+
             }
         });
         swipeContainer.setRefreshing(false);
@@ -153,14 +159,22 @@ public class ImageActivity extends AppCompatActivity  {
         return relativeTimeSpan;
     }
 
-    public void showAllComments() {
+    private void showErrorDialog(String errorTitle, String errorMessage) {
+        FragmentManager fm = getSupportFragmentManager();
+        ErrorDialog errorDialog = ErrorDialog.newInstance(errorTitle, errorMessage);
+        errorDialog.show(fm, "error_fragment");
+
+    }
+
+   private void showCommentsDialog() {
         lvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                InstagramPhotoComments showComments = InstagramPhotoComments.newInstance("TitLe");
-                showComments.show(fm, "comments_fragment");
+                CommentsDialog commentsDialog = CommentsDialog.newInstance(photo.allComments);
+                commentsDialog.show(fm, "comments_fragment");
             }
         });
+
     }
 }

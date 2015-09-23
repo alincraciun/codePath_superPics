@@ -1,7 +1,6 @@
 package com.alinc.instagramstream;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import java.util.List;
  */
 public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
     private LayoutInflater inflater;
-    FragmentManager fm;
     private static class ViewHolder {
         TextView tvCaption;
         TextView tvUser;
@@ -75,17 +73,21 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 
         screenWidth = (int)dpWidth - (viewHolder.ivPhoto.getPaddingLeft() + viewHolder.ivPhoto.getPaddingRight());
         viewHolder.ivPhoto.setMaxWidth(screenWidth);
-        viewHolder.ivPhoto.setMaxHeight(photo.imageHeight/(photo.imageWidth / screenWidth));
+        if(photo.imageWidth > 0)
+            viewHolder.ivPhoto.setMaxHeight(photo.imageHeight / (photo.imageWidth / screenWidth));
+        else
+            viewHolder.ivPhoto.setMaxHeight(photo.imageHeight / screenWidth);
         Picasso.with(getContext()).load(photo.imageURL).centerCrop().placeholder(R.drawable.xvga_35mm).fit().into(viewHolder.ivPhoto);
 
         if(photo.allComments.size() > 0) {
             LinearLayout list = (LinearLayout) convertView.findViewById(R.id.llComments);
             list.removeAllViews();
-            //Log.i("Debug::", String.valueOf(photo.commentsCount));
-            for(String photoComment : photo.allComments) {
-                TextView commentRow = (TextView) inflater.inflate(R.layout.photo_comment, null);
-                //Log.i("Debug::", photoComment);
-                commentRow.setText(Html.fromHtml(photoComment));
+            TextView commentRow = (TextView) inflater.inflate(R.layout.photo_comment, null);
+            commentRow.setText(Html.fromHtml(photo.allComments.get((photo.allComments.size()) - 1).toString()));
+            list.addView(commentRow);
+            if((photo.allComments.size() - 2) >= 0) {
+                commentRow = (TextView) inflater.inflate(R.layout.photo_comment, null);
+                commentRow.setText(Html.fromHtml(photo.allComments.get((photo.allComments.size()) - 2).toString()));
                 list.addView(commentRow);
             }
             viewHolder.tvCommCount.setText("View all " + String.valueOf(photo.commentsCount) + " comments");
